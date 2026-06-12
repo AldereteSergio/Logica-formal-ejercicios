@@ -387,8 +387,8 @@ export default function App() {
   // Respuestas del usuario guardadas como: { [rowIndex]: { [tokenIndex]: "V"|"F"|"" } }
   const [userAnswers, setUserAnswers] = useState<Record<number, Record<number, string>>>({});
   const [autoFillVars, setAutoFillVars] = useState<boolean>(false);
-  const [variableOrder, setVariableOrder] = useState<string>('reverse'); // 'reverse' = Russell-Whitehead, 'standard' = Tradicional
-  const [tolerantMode, setTolerantMode] = useState<boolean>(true); // Tolerar representaciones raras de negaciones
+  const [variableOrder] = useState<string>('reverse'); // 'reverse' = Russell-Whitehead, 'standard' = Tradicional
+  const [joinNegations, setJoinNegations] = useState<boolean>(true); // Unir negaciones con variables (ej: ~p)
   
   // Estados de control de la UI
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -510,12 +510,6 @@ export default function App() {
     }
   };
 
-  const loadExample = (formulaStr: string, order = 'reverse') => {
-    setFormulaInput(formulaStr);
-    setVariableOrder(order);
-    handleGenerateTable(formulaStr, order);
-  };
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sharedFormula = params.get('formula');
@@ -554,8 +548,17 @@ export default function App() {
     if (!ast) return;
     let errorsCount = 0;
     const newErrors: Record<number, Record<number, boolean>> = {};
-    const negatedMap = findNegatedVariables(ast);
     const activeTokens = tokens.filter((t) => t.type !== 'paren');
+
+    // Si unimos negaciones, identificamos qué índices de variables están ocultos tras un ~
+    const hiddenIndices = new Set<number>();
+    if (joinNegations) {
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].type === 'op_neg' && tokens[i + 1]?.type === 'var') {
+          hiddenIndices.add(tokens[i + 1].index);
+        }
+      }
+    }
 
     rowStates.forEach((rowState, rIndex) => {
       newErrors[rIndex] = {};
@@ -563,18 +566,14 @@ export default function App() {
       evaluateAST(ast, rowState, correctTokenValues);
 
       activeTokens.forEach((tok) => {
+        // Si el token está oculto (es la variable de un ~p unido), no lo validamos aquí
+        if (hiddenIndices.has(tok.index)) return;
+
         const userVal = userAnswers[rIndex]?.[tok.index] || '';
         const correctBool = correctTokenValues[tok.index];
         const correctValStr = correctBool ? 'V' : 'F';
 
-        let isCellCorrect = userVal === correctValStr;
-        if (!isCellCorrect && tolerantMode && negatedMap[tok.index] !== undefined) {
-          const negationTokenIndex = negatedMap[tok.index];
-          const negationCorrectValStr = correctTokenValues[negationTokenIndex] ? 'V' : 'F';
-          isCellCorrect = userVal === negationCorrectValStr;
-        }
-
-        if (!isCellCorrect) {
+        if (userVal !== correctValStr) {
           newErrors[rIndex][tok.index] = true;
           errorsCount++;
         }
@@ -604,11 +603,21 @@ export default function App() {
     const solvedAnswers: Record<number, Record<number, string>> = {};
     const activeTokens = tokens.filter((t) => t.type !== 'paren');
 
+    const hiddenIndices = new Set<number>();
+    if (joinNegations) {
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].type === 'op_neg' && tokens[i + 1]?.type === 'var') {
+          hiddenIndices.add(tokens[i + 1].index);
+        }
+      }
+    }
+
     rowStates.forEach((rowState, rIndex) => {
       solvedAnswers[rIndex] = {};
       const correctTokenValues: Record<number, boolean> = {};
       evaluateAST(ast, rowState, correctTokenValues);
       activeTokens.forEach((tok) => {
+        if (hiddenIndices.has(tok.index)) return;
         solvedAnswers[rIndex][tok.index] = correctTokenValues[tok.index] ? 'V' : 'F';
       });
     });
@@ -623,9 +632,19 @@ export default function App() {
     const resetAnswers: Record<number, Record<number, string>> = {};
     const activeTokens = tokens.filter((t) => t.type !== 'paren');
 
+    const hiddenIndices = new Set<number>();
+    if (joinNegations) {
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].type === 'op_neg' && tokens[i + 1]?.type === 'var') {
+          hiddenIndices.add(tokens[i + 1].index);
+        }
+      }
+    }
+
     rowStates.forEach((rowState, rIndex) => {
       resetAnswers[rIndex] = {};
       activeTokens.forEach((tok) => {
+        if (hiddenIndices.has(tok.index)) return;
         if (tok.type === 'var' && autoFillVars) {
           resetAnswers[rIndex][tok.index] = rowState[tok.value] ? 'V' : 'F';
         } else {
@@ -681,11 +700,9 @@ export default function App() {
       const headers = lines[0].split(',').map((h) => h.trim());
       const headerStr = headers.join(',');
       let targetFormula = '((p v q) ⊃ ~r) · r';
-      let targetOrder = 'reverse';
 
       if (headerStr === 'p,v,q,⊃,~,r,·,r') {
         targetFormula = '((p v q) ⊃ ~r) · r';
-        targetOrder = 'reverse';
       } else {
         targetFormula = headers.join(' ').replace(/\s+/g, ' ').trim();
       }
@@ -704,9 +721,8 @@ export default function App() {
       setVariables(check.variables);
       setTokens(check.tokens);
       setAst(check.ast);
-      setVariableOrder(targetOrder);
 
-      const comb = generateCombinations(check.variables, targetOrder);
+      const comb = generateCombinations(check.variables, variableOrder);
       setRowStates(comb);
 
       const answers: Record<number, Record<number, string>> = {};
@@ -753,12 +769,23 @@ export default function App() {
 
   const getProgressStats = () => {
     const activeTokens = tokens.filter((t) => t.type !== 'paren');
-    const totalCells = rowStates.length * activeTokens.length;
+    
+    const hiddenIndices = new Set<number>();
+    if (joinNegations) {
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].type === 'op_neg' && tokens[i + 1]?.type === 'var') {
+          hiddenIndices.add(tokens[i + 1].index);
+        }
+      }
+    }
+
+    const visibleActiveTokens = activeTokens.filter(tok => !hiddenIndices.has(tok.index));
+    const totalCells = rowStates.length * visibleActiveTokens.length;
     if (totalCells === 0) return { percent: 0, count: 0, total: 0 };
 
     let filledCells = 0;
     rowStates.forEach((_, rIndex) => {
-      activeTokens.forEach((tok) => {
+      visibleActiveTokens.forEach((tok) => {
         if (userAnswers[rIndex]?.[tok.index]) filledCells++;
       });
     });
@@ -771,7 +798,29 @@ export default function App() {
   };
 
   const progress = getProgressStats();
-  const tableTokens = tokens;
+  
+  // Genera los tokens que se mostrarán en la tabla, permitiendo unir negaciones con variables
+  const displayTokens = (() => {
+    if (!joinNegations) return tokens;
+    const result: (Token & { isMerged?: boolean })[] = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const current = tokens[i];
+      const next = tokens[i + 1];
+      if (current.type === 'op_neg' && next && next.type === 'var') {
+        result.push({
+          ...current,
+          value: current.value + next.value,
+          isMerged: true
+        });
+        i++; // Saltamos el token de la variable
+      } else {
+        result.push(current);
+      }
+    }
+    return result;
+  })();
+
+  const tableTokens = displayTokens;
 
   const starButtonClass = isLight
     ? 'bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900'
@@ -789,10 +838,10 @@ export default function App() {
             </div>
             <div>
               <h1 className={`text-xl font-bold tracking-tight ${isLight ? 'text-indigo-700' : 'bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent'}`}>
-                Russell-Whitehead Logic Matrix
+                Tablas de Verdad - Simbología Russell-Whitehead
               </h1>
               <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                Creador, Validador & Analizador interactivo de Tablas de Verdad
+                Tablero interactivo para crear, validar y analizar tablas de verdad
               </p>
             </div>
           </div>
@@ -828,19 +877,19 @@ export default function App() {
                 onClick={() => setActiveTab('ejercicio')}
                 className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'ejercicio' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Interactive Board
+                Tablero Interactivo
               </button>
               <button
                 onClick={() => setActiveTab('importar')}
                 className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'importar' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Import CSV
+                Importar CSV
               </button>
               <button
                 onClick={() => setActiveTab('teoria')}
                 className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'teoria' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Theory & Symbols
+                Teoría y Símbolos
               </button>
             </nav>
           </div>
@@ -933,38 +982,13 @@ export default function App() {
                       </button>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className={`text-xs font-medium ${c.inputLabel}`}>Modo Tolerante (Negaciones):</span>
+                      <span className={`text-xs font-medium ${c.inputLabel}`}>Unir negaciones con variables (ej: ~p):</span>
                       <button
-                        onClick={() => setTolerantMode(!tolerantMode)}
-                        className={`w-10 h-6 flex items-center rounded-full p-0.5 transition-colors ${tolerantMode ? 'bg-indigo-600' : isLight ? 'bg-slate-300' : 'bg-slate-800'}`}
+                        onClick={() => setJoinNegations(!joinNegations)}
+                        className={`w-10 h-6 flex items-center rounded-full p-0.5 transition-colors ${joinNegations ? 'bg-indigo-600' : isLight ? 'bg-slate-300' : 'bg-slate-800'}`}
                       >
-                        <div className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${tolerantMode ? 'translate-x-4' : 'translate-x-0'}`} />
+                        <div className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${joinNegations ? 'translate-x-4' : 'translate-x-0'}`} />
                       </button>
-                    </div>
-                    <div>
-                      <span className={`block text-xs font-semibold mb-2 ${c.inputLabel}`}>Orden secuencial de las filas:</span>
-                      <div className={`grid grid-cols-2 gap-2 p-1 rounded-xl border ${isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'}`}>
-                        <button
-                          onClick={() => {
-                            setVariableOrder('reverse');
-                            handleGenerateTable(formulaInput, 'reverse');
-                          }}
-                          className={`py-2 px-2.5 rounded-lg text-left transition-all ${variableOrder === 'reverse' ? 'bg-indigo-600/20 border border-indigo-500/30 text-indigo-600' : `${c.navBtnInactive} border border-transparent`}`}
-                        >
-                          <span className="block text-[10px] font-extrabold uppercase leading-none">Russell-Whitehead</span>
-                          <span className="block text-[8px] opacity-75 mt-0.5">p cambia en cada fila (LSB)</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            setVariableOrder('standard');
-                            handleGenerateTable(formulaInput, 'standard');
-                          }}
-                          className={`py-2 px-2.5 rounded-lg text-left transition-all ${variableOrder === 'standard' ? 'bg-indigo-600/20 border border-indigo-500/30 text-indigo-600' : `${c.navBtnInactive} border border-transparent`}`}
-                        >
-                          <span className="block text-[10px] font-extrabold uppercase leading-none">Tradicional Académico</span>
-                          <span className="block text-[8px] opacity-75 mt-0.5">p cambia al final (MSB)</span>
-                        </button>
-                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <label className={`text-xs font-medium ${c.inputLabel}`}>Variables (aleatorio):</label>
@@ -1052,61 +1076,6 @@ export default function App() {
                       <span>Facebook</span>
                     </a>
                   </div>
-                </div>
-              </div>
-
-              {/* SECCIÓN PRESETS RÁPIDOS */}
-              <div className={`rounded-2xl border p-5 shadow-xl transition-all duration-200 ${c.card}`}>
-                <h2 className={`text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 ${c.cardTitle}`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  Ejercicios Clásicos
-                </h2>
-                <div className="space-y-2">
-                  <button 
-                    onClick={() => loadExample("((p v q) ⊃ ~r) · r", "reverse")}
-                    className={`w-full p-2.5 rounded-xl text-left transition flex items-center justify-between group border ${c.presetBtn}`}
-                  >
-                    <div>
-                      <span className={`block text-xs font-bold font-mono ${isLight ? 'text-indigo-800' : 'text-indigo-200'}`}>((p v q) ⊃ ~r) · r</span>
-                      <span className="block text-[10px] opacity-75">Ejemplo de la Consigna</span>
-                    </div>
-                    <span className="text-xs text-indigo-500 group-hover:translate-x-1 transition-transform">→</span>
-                  </button>
-
-                  <button 
-                    onClick={() => loadExample("((p ⊃ q) · p) ⊃ q", "standard")}
-                    className={`w-full p-2.5 rounded-xl text-left transition flex items-center justify-between group border ${c.presetBtn}`}
-                  >
-                    <div>
-                      <span className={`block text-xs font-bold font-mono ${isLight ? 'text-indigo-800' : 'text-indigo-200'}`}>((p ⊃ q) · p) ⊃ q</span>
-                      <span className="block text-[10px] opacity-75">Modus Ponens (Tautología)</span>
-                    </div>
-                    <span className="text-xs text-indigo-500 group-hover:translate-x-1 transition-transform">→</span>
-                  </button>
-
-                  <button 
-                    onClick={() => loadExample("~(p · q) ≡ (~p v ~q)", "standard")}
-                    className={`w-full p-2.5 rounded-xl text-left transition flex items-center justify-between group border ${c.presetBtn}`}
-                  >
-                    <div>
-                      <span className={`block text-xs font-bold font-mono ${isLight ? 'text-indigo-800' : 'text-indigo-200'}`}>~(p · q) ≡ (~p v ~q)</span>
-                      <span className="block text-[10px] opacity-75">Ley de De Morgan</span>
-                    </div>
-                    <span className="text-xs text-indigo-500 group-hover:translate-x-1 transition-transform">→</span>
-                  </button>
-
-                  <button 
-                    onClick={() => loadExample("((p v q) · ~p) ⊃ q", "standard")}
-                    className={`w-full p-2.5 rounded-xl text-left transition flex items-center justify-between group border ${c.presetBtn}`}
-                  >
-                    <div>
-                      <span className={`block text-xs font-bold font-mono ${isLight ? 'text-indigo-800' : 'text-indigo-200'}`}>((p v q) · ~p) ⊃ q</span>
-                      <span className="block text-[10px] opacity-75">Silogismo Disyuntivo</span>
-                    </div>
-                    <span className="text-xs text-indigo-500 group-hover:translate-x-1 transition-transform">→</span>
-                  </button>
                 </div>
               </div>
 
@@ -1209,7 +1178,7 @@ export default function App() {
                             <div className="flex flex-col items-center">
                               <span>{tok.value}</span>
                               <span className="text-[8px] opacity-40 font-sans tracking-normal font-normal mt-0.5">
-                                {tok.type === 'var' ? 'var' : tok.type === 'paren' ? 'str' : 'op'}
+                                {tok.type === 'var' ? 'var' : tok.type === 'paren' ? 'par' : 'op'}
                               </span>
                             </div>
                           </th>
@@ -1279,14 +1248,13 @@ export default function App() {
                 </div>
 
                 {/* INFORMACIÓN DE CONFIGURACIÓN DEL MODO */}
-                <div className={`px-5 py-3 border-t flex justify-between text-[11px] font-bold ${isLight ? 'bg-slate-50 border-slate-200 text-slate-500' : 'bg-slate-950/40 border-slate-800 text-slate-500'}`}>
-                  <span>Modo de visualización de filas: {variableOrder === 'reverse' ? "LSB first (Russell-Whitehead)" : "MSB first (Tradicional)"}</span>
-                  {tolerantMode && (
+                <div className={`px-5 py-3 border-t flex justify-end text-[11px] font-bold ${isLight ? 'bg-slate-50 border-slate-200 text-slate-500' : 'bg-slate-950/40 border-slate-800 text-slate-500'}`}>
+                  {joinNegations && (
                     <span className="text-amber-600 flex items-center gap-1">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                       </svg>
-                      Modo tolerante activo para variables negadas
+                      Negaciones unidas a variables
                     </span>
                   )}
                 </div>
@@ -1545,7 +1513,7 @@ export default function App() {
       <footer className={`py-12 text-center mt-12 text-xs transition-colors duration-200 border-t ${c.footer}`}>
         <div className="max-w-2xl mx-auto px-6">
           <p className="mb-4 font-bold text-sm bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-            Hecho con ❤️ por Sergio Alderete
+            Hecho con 🔥 por Sergio Alderete
           </p>
           <p className="mb-6 leading-relaxed opacity-80 italic">
             "Para los estudiantes de la UBA que luchan con las tablas de verdad en Filosofía, CBC o Exactas. 
@@ -1554,7 +1522,7 @@ export default function App() {
           
           <div className="flex flex-col items-center gap-6">
             <div className="flex items-center gap-4 opacity-75">
-              <span className="font-bold">novafuria</span>
+              <span className="font-bold">Sergio Alderete</span>
               <span className="w-1 h-1 rounded-full bg-slate-500"></span>
               <span>© 2026</span>
             </div>

@@ -1,4 +1,4 @@
-# Russell-Whitehead Logic Matrix Board
+# Tablas de Verdad - Simbología Russell-Whitehead
 
 Tabla de verdad interactiva con notación lógica de **Principia Mathematica** (Russell & Whitehead). Pensada para ayudar a estudiantes de la **UBA** (Filosofía, CBC, Exactas) y cualquier persona interesada en la lógica formal.
 
@@ -83,7 +83,7 @@ Si te resultó útil, **[dejanos una estrella en GitHub](https://github.com/Alde
 
 ## Sobre el autor
 
-Hecho con ❤️ por **Sergio Alderete** (novafuria). 
+Hecho con ❤️ por **Sergio Alderete**. 
 
 ## Licencia
 
