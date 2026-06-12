@@ -1,5 +1,38 @@
 import { useState, useEffect } from 'react';
+import { 
+  Share2, 
+  CheckCircle2, 
+  Eye, 
+  Trash2, 
+  Download, 
+  Plus, 
+  Moon, 
+  Sun, 
+  BookOpen, 
+  Layout, 
+  FileUp,
+  Info
+} from 'lucide-react';
 import { GITHUB_REPO_URL } from './config';
+
+// Iconos de marcas personalizados (SVG)
+const GitHubIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.017-.868-.025-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+  </svg>
+);
+
+const CafecitoIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 512 512" fill="currentColor">
+    <path d="M127.1 146.5c1.3 7.7 8 13.5 16 13.5h165.4c8.1 0 14.7-5.8 16-13.5l10.5-63.5C336.4 75.3 330.5 68 322.7 68H134.8c-7.8 0-13.7 7.3-12.3 15l10.5 63.5zM448 192H64c-17.7 0-32 14.3-32 32v16c0 17.7 14.3 32 32 32h14.1l23.5 188.2c2.7 21.8 20.6 38.5 42.6 38.5h207.6c22 0 39.9-16.7 42.6-38.5L417.9 272H448c17.7 0 32-14.3 32-32v-16c0-17.7-14.3-32-32-32z" />
+  </svg>
+);
+
+const KofiIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.724c-.304 0-.538.279-.551.582-.076 1.669-.03 9.807.03 11.309.015.3.273.544.577.544h14.971c.304 0 .527-.215.557-.519.09-1.08.423-3.391 1.587-4.504l.042-.04c1.061-.989 6.72-1.171 6.444-5.481l-.004.202zm-4.834 2.79c-1.02.925-1.354 2.647-1.467 3.601H2.027c-.03-.917-.052-7.145-.022-10.34h14.742s.215 1.886 2.127 2.021c1.912.135 3.84.567 4.185 2.875.345 2.308-1.245 2.549-2.033 2.752z" />
+  </svg>
+);
 
 // ==========================================
 // 1. ANALIZADOR DE LÓGICA PROPOSICIONAL (AST)
@@ -400,35 +433,35 @@ export default function App() {
 
   // Mapeo dinámico de colores y estilos según el Tema (Modo Claro de alto contraste por defecto)
   const c = {
-    bg: isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-900 text-slate-100',
-    header: isLight ? 'border-slate-200 bg-white shadow-sm' : 'border-slate-800 bg-slate-950/60',
+    bg: isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-slate-50',
+    header: isLight ? 'border-slate-200 bg-white shadow-sm' : 'border-slate-800 bg-slate-950/80',
     navBg: isLight ? 'bg-slate-100 border-slate-300' : 'bg-slate-900 border-slate-800',
     navBtnActive: 'bg-indigo-600 text-white shadow-md',
-    navBtnInactive: isLight ? 'text-slate-600 hover:text-slate-950 hover:bg-slate-200/50' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40',
-    card: isLight ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-950/40 border-slate-800',
-    cardTitle: isLight ? 'text-indigo-700' : 'text-indigo-400',
-    inputLabel: isLight ? 'text-slate-700' : 'text-slate-400',
+    navBtnInactive: isLight ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-200' : 'text-slate-300 hover:text-white hover:bg-slate-800',
+    card: isLight ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-900 border-slate-800',
+    cardTitle: isLight ? 'text-indigo-800' : 'text-indigo-400',
+    inputLabel: isLight ? 'text-slate-800' : 'text-slate-200',
     input: isLight 
-      ? 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600' 
-      : 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500',
+      ? 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600' 
+      : 'bg-slate-950 border-slate-700 text-slate-50 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500',
     keyboardBtn: isLight 
-      ? 'bg-slate-50 hover:bg-slate-150 border-slate-250 text-slate-700 hover:border-slate-400 shadow-sm' 
-      : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300 hover:border-slate-700',
+      ? 'bg-white hover:bg-slate-100 border-slate-300 text-slate-800 hover:border-slate-400 shadow-sm' 
+      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-100 hover:border-slate-600',
     presetBtn: isLight 
-      ? 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300 shadow-sm' 
-      : 'bg-slate-900/60 hover:bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700',
-    badge: isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-indigo-950 border-indigo-800/30 text-indigo-300',
-    progressBg: isLight ? 'bg-slate-200' : 'bg-slate-900',
-    tableHeaderRow: isLight ? 'bg-slate-100/80 border-b border-slate-200' : 'bg-slate-900/60 border-b border-slate-800',
-    tableCellNum: isLight ? 'border-r border-slate-200 bg-slate-100 text-slate-600' : 'border-r border-slate-800 bg-slate-950/10 text-slate-500',
-    tableCellParen: isLight ? 'bg-slate-100/50 text-slate-400 font-extrabold' : 'bg-slate-950/30 text-slate-700 font-extrabold',
+      ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-800 hover:border-slate-400 shadow-sm' 
+      : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 text-slate-100 hover:border-slate-600',
+    badge: isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-indigo-900/40 border-indigo-800 text-indigo-300',
+    progressBg: isLight ? 'bg-slate-200' : 'bg-slate-800',
+    tableHeaderRow: isLight ? 'bg-slate-100 border-b border-slate-200' : 'bg-slate-900 border-b border-slate-800',
+    tableCellNum: isLight ? 'border-r border-slate-200 bg-slate-50 text-slate-800' : 'border-r border-slate-800 bg-slate-950 text-slate-300',
+    tableCellParen: isLight ? 'bg-slate-50 text-slate-400 font-extrabold' : 'bg-slate-950 text-slate-700 font-extrabold',
     cellBtnEmpty: isLight 
-      ? 'bg-slate-50 border-slate-300 text-slate-400 hover:bg-slate-150 hover:border-slate-400 hover:text-slate-600' 
-      : 'bg-slate-900/20 border-slate-800 text-slate-400 hover:border-indigo-500/50',
+      ? 'bg-white border-slate-300 text-slate-500 hover:bg-slate-50 hover:border-slate-400' 
+      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-indigo-500',
     cellBtnAuto: isLight 
-      ? 'bg-slate-100 border-slate-300 text-indigo-700 font-extrabold shadow-inner' 
-      : 'bg-slate-900/80 border-slate-800/60 text-indigo-300/80 font-extrabold',
-    footer: isLight ? 'border-t border-slate-200 bg-white text-slate-400' : 'border-t border-slate-800 bg-slate-950/40 text-slate-500',
+      ? 'bg-slate-100 border-slate-300 text-indigo-800 font-extrabold shadow-inner' 
+      : 'bg-slate-800 border-slate-700 text-indigo-300 font-extrabold',
+    footer: isLight ? 'border-t border-slate-200 bg-white text-slate-900' : 'border-t border-slate-800 bg-slate-950 text-slate-50',
   };
 
   const [showStarPrompt, setShowStarPrompt] = useState(false);
@@ -845,15 +878,13 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-indigo-600 rounded-lg shadow-lg text-white">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+              <Layout className="w-6 h-6" />
             </div>
             <div>
-              <h1 className={`text-xl font-bold tracking-tight ${isLight ? 'text-indigo-700' : 'bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent'}`}>
+              <h1 className={`text-xl font-bold tracking-tight ${isLight ? 'text-indigo-800' : 'bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent'}`}>
                 Tablas de Verdad - Simbología Russell-Whitehead
               </h1>
-              <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <p className={`text-xs font-medium ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
                 Tablero interactivo para crear, validar y analizar tablas de verdad
               </p>
             </div>
@@ -866,43 +897,39 @@ export default function App() {
               rel="noreferrer"
               className={`font-bold py-2 px-3 rounded-xl border text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95 ${starButtonClass}`}
             >
-              ⭐ Star en GitHub
+              <GitHubIcon className="w-3.5 h-3.5" />
+              Star en GitHub
             </a>
 
             <button
               onClick={() => setTheme(isLight ? 'dark' : 'light')}
-              className={`p-2 rounded-xl border transition ${isLight ? 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200' : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'}`}
+              className={`p-2 rounded-xl border transition ${isLight ? 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200' : 'bg-slate-900 border-slate-800 text-slate-100 hover:bg-slate-800'}`}
               title={isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro'}
             >
-              {isLight ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              )}
+              {isLight ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
 
             <nav className={`flex items-center rounded-lg p-1 border shadow-inner ${c.navBg}`}>
               <button
                 onClick={() => setActiveTab('ejercicio')}
-                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'ejercicio' ? c.navBtnActive : c.navBtnInactive}`}
+                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${activeTab === 'ejercicio' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Tablero Interactivo
+                <Layout className="w-3.5 h-3.5" />
+                Tablero
               </button>
               <button
                 onClick={() => setActiveTab('importar')}
-                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'importar' ? c.navBtnActive : c.navBtnInactive}`}
+                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${activeTab === 'importar' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Importar CSV
+                <FileUp className="w-3.5 h-3.5" />
+                Importar
               </button>
               <button
                 onClick={() => setActiveTab('teoria')}
-                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${activeTab === 'teoria' ? c.navBtnActive : c.navBtnInactive}`}
+                className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${activeTab === 'teoria' ? c.navBtnActive : c.navBtnInactive}`}
               >
-                Teoría y Símbolos
+                <BookOpen className="w-3.5 h-3.5" />
+                Teoría
               </button>
             </nav>
           </div>
@@ -933,9 +960,7 @@ export default function App() {
             <div className="lg:col-span-1 flex flex-col gap-6">
               <div className={`rounded-2xl border p-5 shadow-xl transition-all duration-200 ${c.card}`}>
                 <h2 className={`text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2 ${c.cardTitle}`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                  </svg>
+                  <Plus className="w-4 h-4" />
                   Crear Ejercicio
                 </h2>
 
@@ -1035,12 +1060,10 @@ export default function App() {
               {/* SECCIÓN COMPARTIR EJERCICIO */}
               <div className={`rounded-2xl border p-5 shadow-xl transition-all duration-200 ${c.card}`}>
                 <h2 className={`text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 ${c.cardTitle}`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l5.132-2.566m0 0a3 3 0 10-2.23-5.547 3 3 0 002.23 5.547zm0 11.648l-5.132-2.566m0 0a3 3 0 102.23 5.547 3 3 0 00-2.23-5.547z" />
-                  </svg>
+                  <Share2 className="w-4 h-4" />
                   Compartir Ejercicio
                 </h2>
-                <p className="text-xs opacity-75 mb-4 leading-relaxed">
+                <p className="text-xs font-medium opacity-80 mb-4 leading-relaxed">
                   Genera un enlace directo para que tus compañeros o profesores puedan resolver esta misma fórmula interactiva.
                 </p>
                 <div className="space-y-3">
@@ -1052,9 +1075,7 @@ export default function App() {
                     }}
                     className={`w-full font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 border ${c.presetBtn}`}
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                    </svg>
+                    <Share2 className="w-4 h-4" />
                     Copiar Enlace Directo
                   </button>
 
@@ -1281,9 +1302,7 @@ export default function App() {
                     onClick={validateTable}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition active:scale-[0.98] text-xs flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <CheckCircle2 className="w-4 h-4" />
                     Validar Resultados
                   </button>
 
@@ -1293,21 +1312,18 @@ export default function App() {
                       isLight ? 'bg-slate-200 hover:bg-slate-300 border-slate-300 text-slate-800' : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
                     }`}
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                    <Eye className="w-4 h-4" />
                     Revelar Solución
                   </button>
 
                   <button 
                     onClick={clearAnswers}
                     className={`border py-3 px-4 rounded-xl transition active:scale-[0.98] text-xs font-semibold ${
-                      isLight ? 'bg-slate-50 hover:bg-slate-100 border-slate-300 text-slate-600' : 'bg-slate-850 hover:bg-slate-800 border-slate-850 text-slate-400'
+                      isLight ? 'bg-slate-50 hover:bg-slate-100 border-slate-300 text-slate-700' : 'bg-slate-850 hover:bg-slate-800 border-slate-850 text-slate-300'
                     }`}
                     title="Limpiar Respuestas"
                   >
-                    Limpiar Todo
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
@@ -1315,9 +1331,7 @@ export default function App() {
                   onClick={exportCSV}
                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-5 rounded-xl shadow-md transition active:scale-[0.98] text-xs flex items-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
+                  <Download className="w-4 h-4" />
                   Exportar CSV
                 </button>
               </div>
@@ -1331,9 +1345,7 @@ export default function App() {
         {activeTab === 'importar' && (
           <div className={`rounded-2xl border p-6 shadow-xl max-w-4xl mx-auto w-full transition-colors duration-200 ${c.card}`}>
             <h2 className={`text-lg font-bold mb-2 flex items-center gap-2 ${c.cardTitle}`}>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
+              <FileUp className="w-5 h-5" />
               Importar Ejercicio desde CSV
             </h2>
             <p className="text-xs opacity-75 mb-6 leading-relaxed">
@@ -1391,9 +1403,7 @@ export default function App() {
             {/* CARD: SIMBOLOGÍA DE RUSSELL-WHITEHEAD */}
             <div className={`rounded-2xl border p-6 shadow-xl transition-all duration-200 ${c.card}`}>
               <h2 className={`text-lg font-bold mb-3 flex items-center gap-2 ${c.cardTitle}`}>
-                <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
+                <BookOpen className="w-5 h-5 text-indigo-500" />
                 Simbología Lógica de Russell-Whitehead
               </h2>
               <p className="text-sm opacity-80 leading-relaxed mb-6">
@@ -1522,62 +1532,68 @@ export default function App() {
 
       </main>
 
-      {/* FOOTER */}
-      <footer className={`py-12 text-center mt-12 text-xs transition-colors duration-200 border-t ${c.footer}`}>
-        <div className="max-w-2xl mx-auto px-6">
-          <p className="mb-4 font-bold text-sm bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-            Hecho con 🔥 por Sergio Alderete
-          </p>
-          <p className="mb-6 leading-relaxed opacity-80 italic">
-            "Para los estudiantes de la UBA que luchan con las tablas de verdad en Filosofía, CBC o Exactas. 
-            Que la lógica de Russell y Whitehead les sea leve."
-          </p>
+      {/* FOOTER REDISEÑADO */}
+      <footer className={`py-10 mt-12 transition-colors duration-200 border-t ${c.footer}`}>
+        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row justify-between items-center gap-8">
           
-          <div className="flex flex-col items-center gap-6">
-            <div className="flex items-center gap-4 opacity-75">
-              <span className="font-bold">Sergio Alderete</span>
-              <span className="w-1 h-1 rounded-full bg-slate-500"></span>
+          {/* Lado Izquierdo: Créditos y UBA */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-2">
+            <p className="font-bold text-base bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
+              Hecho con 🔥 por Sergio Alderete
+            </p>
+            <p className="text-xs leading-relaxed opacity-90 italic max-w-md">
+              "Para los estudiantes de la UBA que luchan con las tablas de verdad en Filosofía, CBC o Exactas. 
+              Que la lógica de Russell y Whitehead les sea leve."
+            </p>
+            <div className="flex items-center gap-3 mt-1 opacity-70 text-[10px] font-bold uppercase tracking-widest">
+              <span>Sergio Alderete</span>
+              <span className="w-1 h-1 rounded-full bg-slate-400"></span>
               <span>© 2026</span>
             </div>
+          </div>
 
-            <div className="space-y-6">
-              <p className="max-w-md mx-auto leading-relaxed">
-                Este es un proyecto de código abierto. Si te ayudó a aprobar o a entender mejor la materia, 
-                podés apoyarlo con una estrella o un cafecito.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-3">
-                <a
-                  href={GITHUB_REPO_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
-                >
-                  ⭐ Star en GitHub
-                </a>
+          {/* Lado Derecho: Apoyo y Redes */}
+          <div className="flex flex-col items-center lg:items-end gap-4">
+            <p className="text-xs font-bold opacity-80 flex items-center gap-2">
+              <Info className="w-3.5 h-3.5 text-indigo-500" />
+              Proyecto Open Source
+            </p>
+            
+            <div className="flex flex-wrap justify-center lg:justify-end gap-3">
+              <a
+                href={GITHUB_REPO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 font-bold py-2.5 px-4 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
+              >
+                <GitHubIcon className="w-4 h-4" />
+                <span>Star</span>
+              </a>
 
-                {/* Botón Cafecito (Argentina) */}
-                <a
-                  href="https://cafecito.app/alderetesergio"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-sky-50 border-sky-200 text-sky-700 hover:bg-sky-100' : 'bg-sky-950/30 border-sky-900/50 text-sky-300 hover:bg-sky-900/50'}`}
-                >
-                  ☕ Cafecito
-                </a>
+              {/* Botón Cafecito (Argentina) */}
+              <a
+                href="https://cafecito.app/alderetesergio"
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 font-bold py-2.5 px-4 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-sky-50 border-sky-200 text-sky-800 hover:bg-sky-100' : 'bg-sky-900/30 border-sky-800/50 text-sky-300 hover:bg-sky-900/50'}`}
+              >
+                <CafecitoIcon className="w-4 h-4" />
+                <span>Cafecito</span>
+              </a>
 
-                {/* Botón Ko-fi (Internacional) */}
-                <a
-                  href="https://ko-fi.com/alderetesergio"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100' : 'bg-rose-950/30 border-rose-900/50 text-rose-300 hover:bg-rose-900/50'}`}
-                >
-                  ❤️ Ko-fi
-                </a>
-              </div>
+              {/* Botón Ko-fi (Internacional) */}
+              <a
+                href="https://ko-fi.com/alderetesergio"
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 font-bold py-2.5 px-4 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-rose-50 border-rose-200 text-rose-800 hover:bg-rose-100' : 'bg-rose-900/30 border-rose-800/50 text-rose-300 hover:bg-rose-900/50'}`}
+              >
+                <KofiIcon className="w-4 h-4" />
+                <span>Ko-fi</span>
+              </a>
             </div>
           </div>
+
         </div>
       </footer>
 
@@ -1593,25 +1609,21 @@ export default function App() {
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-600 rounded-2xl shadow-xl flex items-center justify-center text-white mb-6">
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
+                <Info className="w-10 h-10" />
               </div>
               
               <h3 className={`text-2xl font-bold mb-4 ${isLight ? 'text-slate-900' : 'text-white'}`}>
                 ¡Hola, Andréy!
               </h3>
               
-              <p className={`text-sm leading-relaxed mb-6 opacity-90 ${isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+              <p className={`text-sm leading-relaxed mb-6 font-medium ${isLight ? 'text-slate-700' : 'text-slate-200'}`}>
                 Herramienta web gratuita para practicar tablas de verdad con la notación de Russell-Whitehead (Principia Mathematica). 
                 Ideal para estudiantes de la UBA. Validación interactiva, ejercicios aleatorios, import CSV y enlaces compartibles. Sin publicidad.
               </p>
               
-              <div className={`w-full p-4 rounded-2xl border mb-8 ${isLight ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-indigo-950/30 border-indigo-900/50 text-indigo-300'}`}>
+              <div className={`w-full p-4 rounded-2xl border mb-8 ${isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-900' : 'bg-indigo-900/30 border-indigo-800 text-indigo-100'}`}>
                 <p className="text-sm font-bold flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8.684 10.742l5.132-2.566m0 0a3 3 0 10-2.23-5.547 3 3 0 002.23 5.547zm0 11.648l-5.132-2.566m0 0a3 3 0 102.23 5.547 3 3 0 00-2.23-5.547z" />
-                  </svg>
+                  <Share2 className="w-5 h-5" />
                   ¡No te olvides de compartirlo!
                 </p>
               </div>
