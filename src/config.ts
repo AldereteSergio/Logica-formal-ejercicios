@@ -1,7 +1,7 @@
 /** Configuración central del proyecto — actualizá el repo cuando lo publiques en GitHub. */
-export const GITHUB_REPO_URL = 'https://github.com/Sergio/tabla-de-verdades';
-export const GITHUB_REPO_OWNER = 'Sergio';
-export const GITHUB_REPO_NAME = 'tabla-de-verdades';
+export const GITHUB_REPO_URL = 'https://github.com/AldereteSergio/Logica-formal-ejercicios';
+export const GITHUB_REPO_OWNER = 'AldereteSergio';
+export const GITHUB_REPO_NAME = 'Logica-formal-ejercicios';
 
 /** URL pública del demo (GitHub Pages). Ajustá si usás otro dominio. */
 export const SITE_URL = `https://${GITHUB_REPO_OWNER.toLowerCase()}.github.io/${GITHUB_REPO_NAME}/`;

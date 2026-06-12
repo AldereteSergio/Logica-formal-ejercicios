@@ -1542,19 +1542,39 @@ export default function App() {
       </main>
 
       {/* FOOTER */}
-      <footer className={`py-8 text-center mt-12 text-xs transition-colors duration-200 border-t ${c.footer}`}>
-        <p className="mb-3">© 2026 Russell-Whitehead Logic Matrix Board. Diseñado bajo reglas estrictas de deducción lógica formal.</p>
-        <p className="mb-4 max-w-lg mx-auto leading-relaxed opacity-90">
-          Si te sirvió, dejanos una ⭐ en GitHub — es gratis, nos ayuda a ganar visibilidad y mantener el proyecto sin publicidad.
-        </p>
-        <a
-          href={GITHUB_REPO_URL}
-          target="_blank"
-          rel="noreferrer"
-          className={`inline-flex items-center gap-2 font-bold py-2.5 px-5 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
-        >
-          ⭐ Star en GitHub
-        </a>
+      <footer className={`py-12 text-center mt-12 text-xs transition-colors duration-200 border-t ${c.footer}`}>
+        <div className="max-w-2xl mx-auto px-6">
+          <p className="mb-4 font-bold text-sm bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+            Hecho con ❤️ por Sergio Alderete
+          </p>
+          <p className="mb-6 leading-relaxed opacity-80 italic">
+            "Para los estudiantes de la UBA que luchan con las tablas de verdad en Filosofía, CBC o Exactas. 
+            Que la lógica de Russell y Whitehead les sea leve."
+          </p>
+          
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center gap-4 opacity-75">
+              <span className="font-bold">novafuria</span>
+              <span className="w-1 h-1 rounded-full bg-slate-500"></span>
+              <span>© 2026</span>
+            </div>
+
+            <div className="space-y-4">
+              <p className="max-w-md mx-auto leading-relaxed">
+                Este es un proyecto de código abierto. Si te ayudó a aprobar o a entender mejor la materia, 
+                una estrella en GitHub es la mejor forma de decir gracias.
+              </p>
+              <a
+                href={GITHUB_REPO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
+              >
+                ⭐ Star en GitHub
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

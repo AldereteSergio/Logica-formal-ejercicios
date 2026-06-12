@@ -1,12 +1,10 @@
 # Russell-Whitehead Logic Matrix Board
 
-Tabla de verdad interactiva con notación lógica de **Principia Mathematica** (Russell & Whitehead). Practica, valida y comparte ejercicios de lógica proposicional — **sin publicidad**.
+Tabla de verdad interactiva con notación lógica de **Principia Mathematica** (Russell & Whitehead). Pensada para ayudar a estudiantes de la **UBA** (Filosofía, CBC, Exactas) y cualquier persona interesada en la lógica formal.
 
 ## Demo en vivo
 
-**[Abrir la aplicación](https://sergio.github.io/tabla-de-verdades/)**
-
-> Actualizá la URL en `src/config.ts` cuando publiques el repo con tu usuario/organización de GitHub.
+**[Abrir la aplicación](https://alderetesergio.github.io/Logica-formal-ejercicios/)**
 
 ## Vista previa
 
@@ -24,13 +22,13 @@ Para grabar el GIF:
 
 ## Características
 
-- Notación Russell-Whitehead: `~`, `·`, `v`, `⊃`, `≡`
-- Tabla interactiva con validación celda por celda
-- Generador aleatorio de ejercicios (2–4 variables)
-- Importación y exportación CSV
-- Enlaces compartibles con fórmula en la URL (`?formula=...`)
-- Modo claro/oscuro
-- 100% cliente, sin backend
+- **Notación Russell-Whitehead**: `~`, `·`, `v`, `⊃`, `≡`
+- **Tabla interactiva**: Validación celda por celda en tiempo real.
+- **Generador aleatorio**: Ejercicios de 2 a 4 variables para practicar.
+- **Importación/Exportación CSV**: Guardá tus tablas o cargá ejercicios externos.
+- **Enlaces compartibles**: Generá una URL con la fórmula precargada (`?formula=...`).
+- **Modo Claro/Oscuro**: Porque la lógica no descansa de noche.
+- **100% Cliente**: Privacidad total, sin backend.
 
 ## Desarrollo local
 
@@ -46,12 +44,10 @@ npm run preview  # previsualiza el build
 
 El workflow [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml) publica automáticamente en cada push a `main`.
 
-**Pasos una sola vez en GitHub:**
+**Pasos en GitHub:**
 
-1. Creá el repositorio `tabla-de-verdades` (o ajustá `src/config.ts` y `vite.config.ts`)
-2. Subí el código: `git push -u origin main`
-3. En **Settings → Pages → Build and deployment**, elegí **GitHub Actions**
-4. Tras el primer deploy, actualizá `SITE_URL` en `src/config.ts` si la URL difiere
+1. Subí el código: `git push -u origin main`
+2. En **Settings → Pages → Build and deployment**, elegí **GitHub Actions**.
 
 ## Topics del repositorio
 
@@ -63,7 +59,7 @@ npm run setup:github-topics
 
 O manualmente en **Settings → General → Topics**:
 
-`logic` · `truth-table` · `education` · `propositional-logic` · `russell-whitehead` · `principia-mathematica` · `react` · `typescript`
+`logic` · `truth-table` · `education` · `propositional-logic` · `russell-whitehead` · `principia-mathematica` · `react` · `typescript` · `uba`
 
 ## Difusión (listas y comunidades)
 
@@ -73,18 +69,22 @@ Acciones manuales de alto impacto — copiá el pitch y enviálo donde correspon
 |-------|--------|-----------|
 | Reddit r/logic | https://www.reddit.com/r/logic/ | Post con demo + enlace |
 | Reddit r/philosophyofmath | https://www.reddit.com/r/philosophyofmath/ | Mismo pitch, enfoque histórico |
-| MathOverflow (meta) | https://mathoverflow.net/ | Solo si encaja con una pregunta existente |
+| Reddit r/UBA | https://www.reddit.com/r/UBA/ | Post enfocado en ayudar a ingresantes/estudiantes |
 | Hacker News (Show HN) | https://news.ycombinator.com/submit | Título: *Show HN: Interactive truth table with Principia Mathematica notation* |
 | Awesome lists | Buscar *awesome logic* / *awesome math* | PR agregando el enlace del demo |
 
 **Pitch sugerido:**
 
-> Herramienta web gratuita para practicar tablas de verdad con la notación de Russell-Whitehead (Principia Mathematica). Validación interactiva, ejercicios aleatorios, import CSV y enlaces compartibles. Sin publicidad. [Demo](https://sergio.github.io/tabla-de-verdades/) · [Código](https://github.com/Sergio/tabla-de-verdades)
+> Herramienta web gratuita para practicar tablas de verdad con la notación de Russell-Whitehead (Principia Mathematica). Ideal para estudiantes de la UBA. Validación interactiva, ejercicios aleatorios, import CSV y enlaces compartibles. Sin publicidad. [Demo](https://alderetesergio.github.io/Logica-formal-ejercicios/) · [Código](https://github.com/AldereteSergio/Logica-formal-ejercicios)
 
 ## Apoyar el proyecto
 
-Si te resultó útil, **[dejanos una estrella en GitHub](https://github.com/Sergio/tabla-de-verdades)** — ayuda a mantener el proyecto visible y sin publicidad.
+Si te resultó útil, **[dejanos una estrella en GitHub](https://github.com/AldereteSergio/Logica-formal-ejercicios)** — ayuda a mantener el proyecto visible y sin publicidad.
+
+## Sobre el autor
+
+Hecho con ❤️ por **Sergio Alderete** (novafuria). 
 
 ## Licencia
 
-MIT (o la que elijas al publicar).
+MIT.
