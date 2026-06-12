@@ -8,17 +8,8 @@ Tabla de verdad interactiva con notación lógica de **Principia Mathematica** (
 
 ## Vista previa
 
-![Captura de la tabla de verdad interactiva](./docs/preview.svg)
+![Captura de la tabla de verdad interactiva](./docs/preview.gif)
 
-<!-- Reemplazá la imagen anterior por un GIF real cuando lo grabes:
-![Demo animada](./docs/demo.gif)
--->
-
-Para grabar el GIF:
-1. `npm run dev`
-2. Resolvé un ejercicio y validá la tabla
-3. Usá [ScreenToGif](https://www.screentogif.com/) o similar
-4. Guardá como `docs/demo.gif` y actualizá este README
 
 ## Características
 
@@ -60,18 +51,6 @@ npm run setup:github-topics
 O manualmente en **Settings → General → Topics**:
 
 `logic` · `truth-table` · `education` · `propositional-logic` · `russell-whitehead` · `principia-mathematica` · `react` · `typescript` · `uba`
-
-## Difusión (listas y comunidades)
-
-Acciones manuales de alto impacto — copiá el pitch y enviálo donde corresponda:
-
-| Dónde | Enlace | Qué hacer |
-|-------|--------|-----------|
-| Reddit r/logic | https://www.reddit.com/r/logic/ | Post con demo + enlace |
-| Reddit r/philosophyofmath | https://www.reddit.com/r/philosophyofmath/ | Mismo pitch, enfoque histórico |
-| Reddit r/UBA | https://www.reddit.com/r/UBA/ | Post enfocado en ayudar a ingresantes/estudiantes |
-| Hacker News (Show HN) | https://news.ycombinator.com/submit | Título: *Show HN: Interactive truth table with Principia Mathematica notation* |
-| Awesome lists | Buscar *awesome logic* / *awesome math* | PR agregando el enlace del demo |
 
 **Pitch sugerido:**
 

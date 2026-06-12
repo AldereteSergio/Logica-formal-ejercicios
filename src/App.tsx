@@ -432,6 +432,19 @@ export default function App() {
   };
 
   const [showStarPrompt, setShowStarPrompt] = useState(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+
+  useEffect(() => {
+    const hasSeenPopup = localStorage.getItem('welcome_popup_seen');
+    if (!hasSeenPopup) {
+      setShowWelcomePopup(true);
+    }
+  }, []);
+
+  const closeWelcomePopup = () => {
+    localStorage.setItem('welcome_popup_seen', 'true');
+    setShowWelcomePopup(false);
+  };
 
   useEffect(() => {
     if (!alert) return;
@@ -1527,23 +1540,92 @@ export default function App() {
               <span>© 2026</span>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <p className="max-w-md mx-auto leading-relaxed">
                 Este es un proyecto de código abierto. Si te ayudó a aprobar o a entender mejor la materia, 
-                una estrella en GitHub es la mejor forma de decir gracias.
+                podés apoyarlo con una estrella o un cafecito.
               </p>
-              <a
-                href={GITHUB_REPO_URL}
-                target="_blank"
-                rel="noreferrer"
-                className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
-              >
-                ⭐ Star en GitHub
-              </a>
+              
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href={GITHUB_REPO_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${starButtonClass}`}
+                >
+                  ⭐ Star en GitHub
+                </a>
+
+                {/* Botón Cafecito (Argentina) */}
+                <a
+                  href="https://cafecito.app/alderetesergio"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-sky-50 border-sky-200 text-sky-700 hover:bg-sky-100' : 'bg-sky-950/30 border-sky-900/50 text-sky-300 hover:bg-sky-900/50'}`}
+                >
+                  ☕ Cafecito
+                </a>
+
+                {/* Botón Ko-fi (Internacional) */}
+                <a
+                  href="https://ko-fi.com/alderetesergio"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`inline-flex items-center gap-2 font-bold py-3 px-6 rounded-xl border text-xs transition active:scale-95 ${isLight ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100' : 'bg-rose-950/30 border-rose-900/50 text-rose-300 hover:bg-rose-900/50'}`}
+                >
+                  ❤️ Ko-fi
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* POPUP DE BIENVENIDA / DIFUSIÓN */}
+      {showWelcomePopup && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+          onClick={closeWelcomePopup}
+        >
+          <div 
+            className={`max-w-lg w-full rounded-3xl border shadow-2xl p-8 transform transition-all animate-scale-in ${isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-indigo-600 rounded-2xl shadow-xl flex items-center justify-center text-white mb-6">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              
+              <h3 className={`text-2xl font-bold mb-4 ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                ¡Hola, Andréy!
+              </h3>
+              
+              <p className={`text-sm leading-relaxed mb-6 opacity-90 ${isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+                Herramienta web gratuita para practicar tablas de verdad con la notación de Russell-Whitehead (Principia Mathematica). 
+                Ideal para estudiantes de la UBA. Validación interactiva, ejercicios aleatorios, import CSV y enlaces compartibles. Sin publicidad.
+              </p>
+              
+              <div className={`w-full p-4 rounded-2xl border mb-8 ${isLight ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-indigo-950/30 border-indigo-900/50 text-indigo-300'}`}>
+                <p className="text-sm font-bold flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8.684 10.742l5.132-2.566m0 0a3 3 0 10-2.23-5.547 3 3 0 002.23 5.547zm0 11.648l-5.132-2.566m0 0a3 3 0 102.23 5.547 3 3 0 00-2.23-5.547z" />
+                  </svg>
+                  ¡No te olvides de compartirlo!
+                </p>
+              </div>
+              
+              <button
+                onClick={closeWelcomePopup}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition active:scale-[0.98] text-sm"
+              >
+                Continuar al Tablero
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
