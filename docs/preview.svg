@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#f8fafc"/>
+  <rect x="40" y="40" width="880" height="460" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <rect x="40" y="40" width="880" height="56" rx="16" fill="#ffffff"/>
+  <text x="64" y="78" fill="#4338ca" font-family="Arial, sans-serif" font-size="22" font-weight="700">Russell-Whitehead Logic Matrix</text>
+  <rect x="64" y="120" width="280" height="340" rx="12" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="84" y="150" fill="#4338ca" font-family="Arial, sans-serif" font-size="12" font-weight="700">CREAR EJERCICIO</text>
+  <rect x="84" y="165" width="240" height="36" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="92" y="188" fill="#334155" font-family="monospace" font-size="14">((p v q) ƒ ~r) · r</text>
+  <rect x="360" y="120" width="536" height="340" rx="12" fill="#fff" stroke="#cbd5e1"/>
+  <text x="380" y="150" fill="#64748b" font-family="Arial, sans-serif" font-size="11" font-weight="700">EJERCICIO ACTIVO</text>
+  <text x="380" y="178" fill="#0f172a" font-family="monospace" font-size="18" font-weight="700">((p v q) ƒ ~r) · r</text>
+  <g font-family="monospace" font-size="13" fill="#334155">
+    <text x="400" y="220" font-weight="700">#  p  q  r  v  ƒ  ~  ·  r</text>
+    <text x="400" y="248">1  V  V  V  V  V  F  F  V</text>
+    <text x="400" y="272">2  F  V  V  V  V  F  F  V</text>
+    <text x="400" y="296">3  V  V  F  V  V  F  F  V</text>
+    <text x="400" y="320">4  F  F  F  F  V  F  V  V</text>
+  </g>
+  <rect x="380" y="360" width="180" height="34" rx="8" fill="#4f46e5"/>
+  <text x="420" y="382" fill="#fff" font-family="Arial, sans-serif" font-size="12" font-weight="700">Validar Resultados</text>
+  <rect x="700" y="48" width="120" height="32" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="718" y="69" fill="#92400e" font-family="Arial, sans-serif" font-size="11" font-weight="700">P Star en GitHub</text>
+</svg>

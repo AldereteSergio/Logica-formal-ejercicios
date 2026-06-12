@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Environment files
+.env
+.env.*
+
+# Coverage
+coverage/
+
+# Optional: test snapshots
+*.snap
+
+# Local config
+local.env
+
+# Vite cache (local)
+.vite/
+
+# Prototipo legacy (la app vive en src/App.tsx)
+creador_de_tablas_de_verdad.tsx
+
+# Misc
+*.log
